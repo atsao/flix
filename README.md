@@ -1,4 +1,4 @@
-# Project 1 - *Flix*
+# Project 1 - Flix
 
 *This project is still in development*
 
@@ -10,8 +10,8 @@ Time spent: **2** hours spent in total (so far)
 
 The following **required** functionality is completed:
 
-- [ ] User can view a list of movies currently playing in theaters. Poster images load asynchronously.
-- [ ] User can view movie details by tapping on a cell.
+- [x] User can view a list of movies currently playing in theaters. Poster images load asynchronously.
+- [x] User can view movie details by tapping on a cell.
 - [ ] User sees loading state while waiting for the API.
 - [ ] User sees an error message when there is a network error.
 - [ ] User can pull to refresh the movie list.
@@ -38,9 +38,14 @@ Here's a walkthrough of implemented user stories:
 
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
+## Libraries
+
+- CocoaPods
+    - AFNetworking
+
 ## Notes
 
-Describe any challenges encountered while building the app.
+<!-- Describe any challenges encountered while building the app. -->
 
 ## License
 
