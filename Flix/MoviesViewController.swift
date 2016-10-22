@@ -8,6 +8,7 @@
 
 import UIKit
 import AFNetworking
+import MBProgressHUD
 
 class MoviesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
 
@@ -20,29 +21,34 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         super.viewDidLoad()
         MovieTableView.dataSource = self
         MovieTableView.delegate = self
-        print(endpoint)
         
-            let api_key = "1963f8d3c739cf3c9117d9ef475f6935"
-            let url = URL(string:"https://api.themoviedb.org/3/movie/\(endpoint!)?api_key=\(api_key)")
-            let request = URLRequest(url: url! as URL)
-            let session = URLSession(
-                configuration: URLSessionConfiguration.default,
-                delegate:nil,
-                delegateQueue:OperationQueue.main
-            )
+        fetchMovies()
+    }
+    
+    func fetchMovies() {
+        let api_key = "1963f8d3c739cf3c9117d9ef475f6935"
+        let url = URL(string:"https://api.themoviedb.org/3/movie/\(endpoint!)?api_key=\(api_key)")
+        let request = URLRequest(url: url! as URL)
+        let session = URLSession(
+            configuration: URLSessionConfiguration.default,
+            delegate:nil,
+            delegateQueue:OperationQueue.main
+        )
+        
+        MBProgressHUD.showAdded(to: self.view, animated: true)
+        
+        let task : URLSessionDataTask = session.dataTask(with: request as URLRequest, completionHandler: { (dataOrNil, response, error) in
             
-            let task : URLSessionDataTask = session.dataTask(with: request as URLRequest,completionHandler: { (dataOrNil, response, error) in
-                if let data = dataOrNil {
-                    if let responseDictionary = try! JSONSerialization.jsonObject(with: data, options:[]) as? NSDictionary {
-                        NSLog("response: \(responseDictionary)")
-                        self.movies = responseDictionary["results"] as? [NSDictionary]
-                        self.MovieTableView.reloadData()
-                    }
+            MBProgressHUD.hide(for: self.view, animated: true)
+            
+            if let data = dataOrNil {
+                if let responseDictionary = try! JSONSerialization.jsonObject(with: data, options:[]) as? NSDictionary {
+                    self.movies = responseDictionary["results"] as? [NSDictionary]
+                    self.MovieTableView.reloadData()
                 }
-            });
-            task.resume()
-        
-        
+            }
+        });
+        task.resume()
     }
     
     

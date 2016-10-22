@@ -5,5 +5,6 @@ target 'Flix' do
   use_frameworks!
 
   pod 'AFNetworking'
+  pod 'MBProgressHUD'
 
 end
