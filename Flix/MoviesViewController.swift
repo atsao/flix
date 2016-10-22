@@ -12,6 +12,7 @@ import MBProgressHUD
 
 class MoviesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
 
+    @IBOutlet weak var networkErrorView: UIView!
     @IBOutlet weak var MovieTableView: UITableView!
     
     var movies: [NSDictionary]?
@@ -22,12 +23,12 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         MovieTableView.dataSource = self
         MovieTableView.delegate = self
         
-        fetchMovies()
+        fetchMovies(endpoint: self.endpoint)
     }
     
-    func fetchMovies() {
+    func fetchMovies(endpoint: String) {
         let api_key = "1963f8d3c739cf3c9117d9ef475f6935"
-        let url = URL(string:"https://api.themoviedb.org/3/movie/\(endpoint!)?api_key=\(api_key)")
+        let url = URL(string:"https://api.themoviedb.org/3/movie/\(endpoint)?api_key=\(api_key)")
         let request = URLRequest(url: url! as URL)
         let session = URLSession(
             configuration: URLSessionConfiguration.default,
@@ -37,18 +38,35 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         
         MBProgressHUD.showAdded(to: self.view, animated: true)
         
-        let task : URLSessionDataTask = session.dataTask(with: request as URLRequest, completionHandler: { (dataOrNil, response, error) in
+        let task : URLSessionDataTask = session.dataTask(with: request as URLRequest, completionHandler: { (dataOrNil, responseOrNil, errorOrNil) in
             
-            MBProgressHUD.hide(for: self.view, animated: true)
-            
-            if let data = dataOrNil {
-                if let responseDictionary = try! JSONSerialization.jsonObject(with: data, options:[]) as? NSDictionary {
-                    self.movies = responseDictionary["results"] as? [NSDictionary]
-                    self.MovieTableView.reloadData()
+            if errorOrNil != nil {
+                MBProgressHUD.hide(for: self.view, animated: true)
+                self.showNetworkError()
+            } else {
+                if let data = dataOrNil {
+                    if let responseDictionary = try! JSONSerialization.jsonObject(with: data, options:[]) as? NSDictionary {
+                        self.successCallback(responseDictionary: responseDictionary)
+                    }
                 }
             }
         });
         task.resume()
+    }
+    
+    func showNetworkError() {
+        self.networkErrorView.isHidden = false
+    }
+    
+    func hideNetworkError() {
+        self.networkErrorView.isHidden = true
+    }
+    
+    func successCallback(responseDictionary: NSDictionary) {
+        MBProgressHUD.hide(for: self.view, animated: true)
+        hideNetworkError()
+        self.movies = responseDictionary["results"] as? [NSDictionary]
+        self.MovieTableView.reloadData()
     }
     
     
