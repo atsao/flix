@@ -24,11 +24,40 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         MovieTableView.delegate = self
         
         fetchMovies(endpoint: self.endpoint)
+        
+        let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: #selector(self.refreshControlAction(refreshControl:)), for: UIControlEvents.valueChanged)
+        MovieTableView.insertSubview(refreshControl, at: 0)
+    }
+    
+    func refreshControlAction(refreshControl: UIRefreshControl) {
+        let url = URL(string:"\(API.URL)/\(endpoint!)?api_key=\(API.Key)")
+        let request = URLRequest(url: url! as URL)
+        let session = URLSession(
+            configuration: URLSessionConfiguration.default,
+            delegate:nil,
+            delegateQueue:OperationQueue.main
+        )
+        
+        let task : URLSessionDataTask = session.dataTask(with: request as URLRequest, completionHandler: { (dataOrNil, responseOrNil, errorOrNil) in
+            
+            if errorOrNil != nil {
+                MBProgressHUD.hide(for: self.view, animated: true)
+                self.showNetworkError()
+            } else {
+                if let data = dataOrNil {
+                    if let responseDictionary = try! JSONSerialization.jsonObject(with: data, options:[]) as? NSDictionary {
+                        self.successCallback(responseDictionary: responseDictionary)
+                    }
+                }
+            }
+            refreshControl.endRefreshing()
+        });
+        task.resume()
     }
     
     func fetchMovies(endpoint: String) {
-        let api_key = "1963f8d3c739cf3c9117d9ef475f6935"
-        let url = URL(string:"https://api.themoviedb.org/3/movie/\(endpoint)?api_key=\(api_key)")
+        let url = URL(string:"\(API.URL)/\(endpoint)?api_key=\(API.Key)")
         let request = URLRequest(url: url! as URL)
         let session = URLSession(
             configuration: URLSessionConfiguration.default,
