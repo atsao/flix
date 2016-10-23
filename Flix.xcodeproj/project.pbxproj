@@ -16,6 +16,7 @@
 		DC82E7D91DB1E63800C940B3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DC82E7D71DB1E63800C940B3 /* LaunchScreen.storyboard */; };
 		DC82E7E11DB1E97600C940B3 /* MoviesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC82E7E01DB1E97600C940B3 /* MoviesViewController.swift */; };
 		DC82E7E41DB2B69E00C940B3 /* MovieCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC82E7E31DB2B69E00C940B3 /* MovieCell.swift */; };
+		DCE0B3E71DBC920000543EF6 /* MovieCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCE0B3E61DBC920000543EF6 /* MovieCollectionCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +33,7 @@
 		DC82E7DA1DB1E63800C940B3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DC82E7E01DB1E97600C940B3 /* MoviesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MoviesViewController.swift; sourceTree = "<group>"; };
 		DC82E7E31DB2B69E00C940B3 /* MovieCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MovieCell.swift; sourceTree = "<group>"; };
+		DCE0B3E61DBC920000543EF6 /* MovieCollectionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MovieCollectionCell.swift; path = flix/MovieCollectionCell.swift; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -100,6 +102,7 @@
 			isa = PBXGroup;
 			children = (
 				DC82E7E31DB2B69E00C940B3 /* MovieCell.swift */,
+				DCE0B3E61DBC920000543EF6 /* MovieCollectionCell.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -236,6 +239,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DCE0B3E71DBC920000543EF6 /* MovieCollectionCell.swift in Sources */,
 				DC82E7CF1DB1E63800C940B3 /* AppDelegate.swift in Sources */,
 				DC82E7E11DB1E97600C940B3 /* MoviesViewController.swift in Sources */,
 				DC6C0CCB1DBC8415003819E3 /* Constant.swift in Sources */,

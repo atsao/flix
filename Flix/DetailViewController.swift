@@ -23,11 +23,50 @@ class DetailViewController: UIViewController {
         
         scrollView.contentSize = CGSize(width: scrollView.frame.size.width, height: infoView.frame.origin.y + infoView.frame.size.height)
         
-        let baseUrl = "https://image.tmdb.org/t/p/w500"
+        let baseUrlLow = IMG.BaseURLLowRes
+        let baseUrlHigh = IMG.BaseURLHighRes
+//        if let posterPath = movie["poster_path"] as? String {
+//            let imageUrl = NSURL(string: baseUrl + posterPath) as! URL
+//            posterImageView.setImageWith(imageUrl)
+//        }
         if let posterPath = movie["poster_path"] as? String {
-            let imageUrl = NSURL(string: baseUrl + posterPath) as! URL
-            posterImageView.setImageWith(imageUrl)
+            let lowResUrl = NSURL(string: baseUrlLow + posterPath) as! URL
+            let highResUrl = NSURL(string: baseUrlHigh + posterPath) as! URL
+            let lowResImageRequest = URLRequest(url: lowResUrl)
+            let highResImageRequest = URLRequest(url: highResUrl)
+            
+            self.posterImageView.setImageWith(
+                lowResImageRequest,
+                placeholderImage: nil,
+                success: { (smallImageRequest, smallImageResponse, smallImage) in
+                    if smallImageResponse != nil {
+                        self.posterImageView.alpha = 0
+                        self.posterImageView.image = smallImage
+                        UIView.animate(withDuration: 0.3,
+                            animations: { () -> Void in
+                                self.posterImageView.alpha = 1
+                            },
+                            completion: { (success) -> Void in
+                                self.posterImageView.setImageWith(
+                                    highResImageRequest,
+                                    placeholderImage: nil,
+                                    success: { (largeImageRequest, largeImageResponse, largeImage) in
+                                        self.posterImageView.image = largeImage
+                                    },
+                                    failure: { (req, res, error) in
+                                        print("Error!")
+                                })
+                    
+                        })
+                    } else {
+                        self.posterImageView.image = smallImage
+                    }
+                },
+                failure: { (req, res, error) in
+                    print("Error!")
+            })
         }
+        
         
         titleLabel.text = movie["title"] as! String?
         overviewLabel.text = movie["overview"] as! String?
@@ -36,7 +75,6 @@ class DetailViewController: UIViewController {
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
 
