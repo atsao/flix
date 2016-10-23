@@ -38,6 +38,7 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         let refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action: #selector(self.refreshControlAction(refreshControl:)), for: UIControlEvents.valueChanged)
         MovieTableView.insertSubview(refreshControl, at: 0)
+        MovieCollectionView.insertSubview(refreshControl, at: 0)
         
         let tableInsets = UIEdgeInsetsMake(0, 0, 50, 0)
         MovieTableView.contentInset = tableInsets
@@ -45,7 +46,7 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         
         let tiles: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
         tiles.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 50, right: 0)
-        tiles.itemSize = CGSize(width: screenSize.width / 3, height: 180)
+        tiles.itemSize = CGSize(width: screenSize.width / 3, height: 185)
         tiles.minimumInteritemSpacing = 0
         tiles.minimumLineSpacing = 0
         MovieCollectionView.collectionViewLayout = tiles
@@ -136,7 +137,7 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
             networkErrorFrame.origin.y += self.networkErrorView.frame.size.height
             self.networkErrorView.frame = networkErrorFrame
             }, completion: { finished in
-                print("done showing!")
+                
         })
     }
     
@@ -146,7 +147,7 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
             networkErrorFrame.origin.y -= self.networkErrorView.frame.size.height
             self.networkErrorView.frame = networkErrorFrame
             }, completion: { finished in
-                print("done hiding!")
+                
         })
         
         self.networkErrorView.isHidden = true

@@ -4,7 +4,7 @@
 
 **Flix** is a movies app using the [The Movie Database API](https://www.themoviedb.org/documentation/api).
 
-Time spent: **13** hours spent in total
+Time spent: **14** hours spent in total
 
 ## User Stories
 
@@ -42,6 +42,7 @@ GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
 - CocoaPods
     - AFNetworking
+    - MBProgressHUD
 
 ## Notes
 
