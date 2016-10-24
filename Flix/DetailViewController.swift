@@ -25,10 +25,7 @@ class DetailViewController: UIViewController {
         
         let baseUrlLow = IMG.BaseURLLowRes
         let baseUrlHigh = IMG.BaseURLHighRes
-//        if let posterPath = movie["poster_path"] as? String {
-//            let imageUrl = NSURL(string: baseUrl + posterPath) as! URL
-//            posterImageView.setImageWith(imageUrl)
-//        }
+
         if let posterPath = movie["poster_path"] as? String {
             let lowResUrl = NSURL(string: baseUrlLow + posterPath) as! URL
             let highResUrl = NSURL(string: baseUrlHigh + posterPath) as! URL
@@ -63,7 +60,15 @@ class DetailViewController: UIViewController {
                     }
                 },
                 failure: { (req, res, error) in
-                    print("Error!")
+                    self.posterImageView.setImageWith(
+                        highResImageRequest,
+                        placeholderImage: nil,
+                        success: { (largeImageRequest, largeImageResponse, largeImage) in
+                            self.posterImageView.image = largeImage
+                        },
+                        failure: { (req, res, error) in
+                            print("Error!")
+                    })
             })
         }
         

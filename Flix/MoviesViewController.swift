@@ -10,14 +10,17 @@ import UIKit
 import AFNetworking
 import MBProgressHUD
 
-class MoviesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UICollectionViewDelegate, UICollectionViewDataSource {
+class MoviesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UICollectionViewDelegate, UICollectionViewDataSource, UISearchBarDelegate {
 
     @IBOutlet weak var networkErrorView: UIView!
     @IBOutlet weak var MovieTableView: UITableView!
+    @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var MovieCollectionView: UICollectionView!
     @IBOutlet weak var layoutControl: UISegmentedControl!
     
     var movies: [NSDictionary]?
+    var filteredMovies: [NSDictionary]?
+    var searchActive: Bool = false
     var endpoint: String!
     var layout: Int = 0
     
@@ -27,6 +30,8 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         
         MovieTableView.dataSource = self
         MovieTableView.delegate = self
+        searchBar.delegate = self
+        
         MovieCollectionView.dataSource = self
         MovieCollectionView.delegate = self
         
@@ -34,6 +39,7 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         setLayout()
         
         fetchMovies(endpoint: self.endpoint)
+        filteredMovies = movies
         
         let refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action: #selector(self.refreshControlAction(refreshControl:)), for: UIControlEvents.valueChanged)
@@ -43,18 +49,35 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         let tableInsets = UIEdgeInsetsMake(0, 0, 50, 0)
         MovieTableView.contentInset = tableInsets
         
-        
         let tiles: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
         tiles.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 50, right: 0)
         tiles.itemSize = CGSize(width: screenSize.width / 3, height: 185)
         tiles.minimumInteritemSpacing = 0
         tiles.minimumLineSpacing = 0
         MovieCollectionView.collectionViewLayout = tiles
+        
+        if let navigationBar = navigationController?.navigationBar {
+            navigationBar.barTintColor = UIColor(red: 0/255, green: 203/255, blue: 89/255, alpha: 1.0)
+            navigationBar.tintColor = UIColor(red: 0/255, green: 154/255, blue: 40/255, alpha: 1.0)
+            
+            let shadow = NSShadow()
+            shadow.shadowColor = UIColor(red: 0/255, green: 154/255, blue: 40/255, alpha: 1.0)
+            shadow.shadowOffset = CGSize(width: 1, height: 1)
+            shadow.shadowBlurRadius = 1;
+            navigationBar.titleTextAttributes = [
+                NSForegroundColorAttributeName: UIColor.white,
+                NSShadowAttributeName: shadow
+            ]
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
-    
+        
+        let indexPath = self.MovieTableView.indexPathForSelectedRow
+        if let selectedIndexPath = indexPath {
+            self.MovieTableView.deselectRow(at: selectedIndexPath, animated: true)
+        }
     }
     
     @IBAction func changeLayout(_ sender: AnyObject) {
@@ -77,7 +100,33 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         
     }
     
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        filteredMovies = searchText.isEmpty ? movies : movies?.filter({ movie in
+            let title = movie["title"] as! String
+            return title.range(of: searchText, options: .caseInsensitive) != nil
+        })
+
+        searchActive = !(filteredMovies?.isEmpty)!
+        
+        self.MovieTableView.reloadData()
+        self.MovieCollectionView.reloadData()
+    }
+    
+    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+        self.searchBar.showsCancelButton = true
+    }
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        self.searchBar.showsCancelButton = false
+        self.searchBar.text = ""
+        self.MovieTableView.reloadData()
+        self.MovieCollectionView.reloadData()
+        self.searchBar.resignFirstResponder()
+    }
+    
+    
     func refreshControlAction(refreshControl: UIRefreshControl) {
+        print("refreshing!!!!!!!!!!!")
         let url = URL(string:"\(API.URL)/\(endpoint!)?api_key=\(API.Key)")
         let request = URLRequest(url: url! as URL)
         let session = URLSession(
@@ -156,14 +205,17 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
     func successCallback(responseDictionary: NSDictionary) {
         MBProgressHUD.hide(for: self.view, animated: true)
         hideNetworkError()
-        self.movies = responseDictionary["results"] as? [NSDictionary]
+        let movieData = responseDictionary["results"] as? [NSDictionary]
+        self.movies = movieData
+        self.filteredMovies = movieData
         self.MovieTableView.reloadData()
         self.MovieCollectionView.reloadData()
     }
     
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if let movies = movies {
+
+        if let movies = self.filteredMovies {
             return movies.count
         } else {
             return 0
@@ -173,7 +225,7 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = MovieTableView.dequeueReusableCell(withIdentifier: "MovieCell") as! MovieCell
         
-        let movie = movies![indexPath.row]
+        let movie = filteredMovies![indexPath.row]
         let title = movie["title"] as! String
         let overview = movie["overview"] as! String
         
@@ -202,13 +254,14 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         
         cell.titleLabel.text = "\(title)"
         cell.overviewLabel.text = "\(overview)"
-
+        cell.selectionStyle = .blue
         
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if let movies = movies {
+
+        if let movies = self.filteredMovies {
             return movies.count
         } else {
             return 0
@@ -217,7 +270,7 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = MovieCollectionView.dequeueReusableCell(withReuseIdentifier: "MovieCollectionCell", for: indexPath) as! MovieCollectionCell
-        let movie = movies![indexPath.row]
+        let movie = filteredMovies![indexPath.row]
         let baseUrl = IMG.BaseURL
         if let posterPath = movie["poster_path"] as? String {
             let imageUrl = NSURL(string: baseUrl + posterPath) as! URL
@@ -248,7 +301,7 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         if segue.identifier == "tableCellSegue" {
             let cell = sender as! UITableViewCell
             let indexPath = MovieTableView.indexPath(for: cell)
-            let movie = movies![indexPath!.row]
+            let movie = filteredMovies![indexPath!.row]
             let detailViewController = segue.destination as! DetailViewController
             detailViewController.movie = movie
         }
@@ -256,7 +309,7 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         if (segue.identifier == "collectionCellSegue") {
             let cell = sender as! UICollectionViewCell
             let indexPath = MovieCollectionView.indexPath(for: cell)
-            let movie = movies![indexPath!.row]
+            let movie = filteredMovies![indexPath!.row]
             let detailViewController = segue.destination as! DetailViewController
             detailViewController.movie = movie
         }
