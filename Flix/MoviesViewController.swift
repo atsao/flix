@@ -43,8 +43,8 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         
         let refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action: #selector(self.refreshControlAction(refreshControl:)), for: UIControlEvents.valueChanged)
+        refreshControl.attributedTitle = NSAttributedString(string: "Pull to refresh!")
         MovieTableView.insertSubview(refreshControl, at: 0)
-        MovieCollectionView.insertSubview(refreshControl, at: 0)
         
         let tableInsets = UIEdgeInsetsMake(0, 0, 50, 0)
         MovieTableView.contentInset = tableInsets
@@ -57,11 +57,11 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         MovieCollectionView.collectionViewLayout = tiles
         
         if let navigationBar = navigationController?.navigationBar {
-            navigationBar.barTintColor = UIColor(red: 0/255, green: 203/255, blue: 89/255, alpha: 1.0)
-            navigationBar.tintColor = UIColor(red: 0/255, green: 154/255, blue: 40/255, alpha: 1.0)
+            navigationBar.barTintColor = UIColor(red: 76/255, green: 104/255, blue: 117/255, alpha: 1.0)
+            navigationBar.tintColor = UIColor(red: 56/255, green: 75/255, blue: 86/255, alpha: 1.0)
             
             let shadow = NSShadow()
-            shadow.shadowColor = UIColor(red: 0/255, green: 154/255, blue: 40/255, alpha: 1.0)
+            shadow.shadowColor = UIColor(red: 56/255, green: 75/255, blue: 86/255, alpha: 1.0)
             shadow.shadowOffset = CGSize(width: 1, height: 1)
             shadow.shadowBlurRadius = 1;
             navigationBar.titleTextAttributes = [
@@ -78,6 +78,8 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         if let selectedIndexPath = indexPath {
             self.MovieTableView.deselectRow(at: selectedIndexPath, animated: true)
         }
+        
+        tabBarController?.tabBar.tintColor = COLOR.Slate
     }
     
     @IBAction func changeLayout(_ sender: AnyObject) {

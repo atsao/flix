@@ -33,6 +33,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         nowPlayingNavigationController.tabBarItem.title = "Now Playing"
         nowPlayingNavigationController.tabBarItem.image = UIImage(named: "movie-reel")
+
         topRatedNavigationController.tabBarItem.title = "Top Rated"
         topRatedNavigationController.tabBarItem.image = UIImage(named: "star")
         

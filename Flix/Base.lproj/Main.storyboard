@@ -117,7 +117,7 @@
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </view>
-                    <navigationItem key="navigationItem" title="FLIX" id="zaB-kN-d3f">
+                    <navigationItem key="navigationItem" title="Flix" id="zaB-kN-d3f">
                         <barButtonItem key="rightBarButtonItem" id="ktC-1U-PZz">
                             <segmentedControl key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" id="Ipd-Es-Zn7">
                                 <rect key="frame" x="276" y="8" width="83" height="29"/>
