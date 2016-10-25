@@ -30,7 +30,7 @@ The following **additional** features are implemented:
 
 ## Video Walkthrough
 
-Here's a walkthrough of implemented user stories:
+Here's a walkthrough of implemented user stories. **Note**: these GIFs repeat only once, so you'll have to refresh to repeat. Will fix them at a later point!
 
 **Walkthrough**
 
@@ -38,7 +38,7 @@ Here's a walkthrough of implemented user stories:
 
 **Network Error**
 
-![Flix network error](./flix-network-error.gif "Walkthrough")
+![Flix network error](./flix-network-error.gif "Network error")
 
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
