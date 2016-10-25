@@ -91,7 +91,7 @@
                                 </prototypes>
                             </tableView>
                             <view hidden="YES" alpha="0.80000000000000004" contentMode="scaleToFill" misplaced="YES" id="nDt-qD-0Bd">
-                                <frame key="frameInset" minY="30" width="375" height="34"/>
+                                <frame key="frameInset" minY="74" width="375" height="34"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Network Error" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="FfO-Aa-QDY">

@@ -1,10 +1,8 @@
 # Project 1 - Flix
 
-*This project is still in development*
-
 **Flix** is a movies app using the [The Movie Database API](https://www.themoviedb.org/documentation/api).
 
-Time spent: **16** hours spent in total
+Time spent: **17** hours spent in total
 
 ## User Stories
 
@@ -34,7 +32,13 @@ The following **additional** features are implemented:
 
 Here's a walkthrough of implemented user stories:
 
-(in development)
+**Walkthrough**
+
+![Flix walkthrough](./flix.gif "Walkthrough")
+
+**Network Error**
+
+![Flix network error](./flix-network-error.gif "Walkthrough")
 
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
 

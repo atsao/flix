@@ -121,6 +121,7 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         self.searchBar.showsCancelButton = false
         self.searchBar.text = ""
+        filteredMovies = movies
         self.MovieTableView.reloadData()
         self.MovieCollectionView.reloadData()
         self.searchBar.resignFirstResponder()
